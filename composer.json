@@ -17,6 +17,7 @@
 		"nette/di": "*"
 	},
 	"autoload": {
-		"psr-0": {"Bazo": "src/"}
+		"psr-4": {"Bazo\\Commands\\": "src/"},
+		"classmap": ["src/exceptions.php"]
 	}
 }

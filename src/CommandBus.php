@@ -24,18 +24,19 @@ class CommandBus
 	public function __construct(array $handlersMap, Nette\DI\Container $container)
 	{
 		$this->handlersMap	 = $handlersMap;
-		$this->container		 = $container;
+		$this->container	 = $container;
 	}
 
 
-	public function handle($eventName, $eventArgs = [])
+	public function handle(Command $command)
 	{
-		if (isset($this->handlersMap[$eventName])) {
-			$handlers = $this->handlersMap[$eventName];
-			foreach ($handlers as list($serviceName, $function)) {
-				$service = $this->container->getService($serviceName);
-				call_user_func_array([$service, $function], $eventArgs);
-			}
+		$class		 = get_class($command);
+		$baseName	 = Helpers::extractBaseNameFromCommandClass($class);
+		if (isset($this->handlersMap[$baseName])) {
+			$handler = $this->handlersMap[$baseName];
+			$handler->handle($command);
+		} else {
+			throw new HandlerNotFoundException(sprintf('Handler for command "%s" not found', $class));
 		}
 	}
 
