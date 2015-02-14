@@ -33,7 +33,8 @@ class CommandBus
 		$class		 = get_class($command);
 		$baseName	 = Helpers::extractBaseNameFromCommandClass($class);
 		if (isset($this->handlersMap[$baseName])) {
-			$handler = $this->handlersMap[$baseName];
+			$handlerServiceName = $this->handlersMap[$baseName];
+			$handler = $this->container->getService($handlerServiceName);
 			$handler->handle($command);
 		} else {
 			throw new HandlerNotFoundException(sprintf('Handler for command "%s" not found', $class));
