@@ -35,7 +35,7 @@ class CommandBus
 		if (isset($this->handlersMap[$baseName])) {
 			$handlerServiceName = $this->handlersMap[$baseName];
 			$handler = $this->container->getService($handlerServiceName);
-			$handler->handle($command);
+			return $handler->handle($command);
 		} else {
 			throw new HandlerNotFoundException(sprintf('Handler for command "%s" not found', $class));
 		}
